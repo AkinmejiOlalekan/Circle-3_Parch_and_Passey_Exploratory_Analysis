@@ -153,7 +153,7 @@ UNION ALL
 SELECT 'poster', SUM(poster_amt_usd) AS revenue FROM orders;
 
 
--- Hour of day with highest web engagement
+-- Hour of day with highest web order
 SELECT
     EXTRACT(HOUR FROM occurred_at) AS hour,
     COUNT(*) AS events
