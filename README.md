@@ -1,1 +1,42 @@
+# Parch and Posey Sales & Performance Analysis
 
+## Project Overview
+This project explores a structured dataset containing **accounts, sales representatives, regions, orders, and web events**. The goal is to derive meaningful business insights that guide Posey's **management decisions**, identify their **top-performing customers and sales reps**, track **regional performance**, and evaluate **seasonal sales trends**.  
+
+By leveraging SQL queries on a PostgreSQL database, we uncover patterns in revenue generation, customer behavior, and market performance.  
+
+
+
+## Dataset Description
+The project uses the following relational tables:
+
+1. **accounts**  
+   - Contains company details including name, website, location coordinates, and assigned sales representative.  
+
+2. **orders**  
+   - Records all sales transactions with quantities, amounts (USD), and timestamps.  
+
+3. **region**  
+   - Lookup table for geographic regions.  
+
+4. **sales_reps**  
+   - Information on sales representatives, including assigned regions.  
+
+5. **web_events**  
+   - Customer interactions and marketing channels used (direct, organic, social, etc.).  
+
+
+## Key Insights & Findings
+The analysis revealed several valuable insights:
+
+1. **Total Revenue and units of products sold**   
+
+2. **Top sales by companies**  
+
+3. **Sales by Revenue**   
+
+4. **Monthly sales trend**  
+
+5. **Most effective marketing channel**  
+
+6. **Sales by Region**  
