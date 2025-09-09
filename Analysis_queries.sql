@@ -1,5 +1,5 @@
 -- Total Sales generated, $23141511.83 and Units of products sold, 3675765
-Select sum(total_amt_usd) as Total_Sales, sum(total) as Total_Units_Sold 
+Select sum(total_amt_usd) as Total_Sales, sum(total) as Total_Units_Sold
 from orders;
 
 
@@ -60,6 +60,7 @@ order by total_sales DESC;
 
 
 -- year 2016, had the highest sales of $12864917.92 and lowest was 2017
+-- Yearly total sales grow substantially through 2016, then taper in 2017
 SELECT DATE_PART('year', occurred_at) AS year,
 SUM(total_amt_usd) AS total_sales
 FROM orders
@@ -119,3 +120,92 @@ order by total_amount DESC
 limit 10
 
 
+-- Accounts with web events vs orders
+SELECT
+    a.name,
+    COUNT(DISTINCT we.id) AS web_events,
+    COUNT(DISTINCT o.id) AS orders
+FROM
+    accounts a
+    LEFT JOIN web_events we ON a.id = we.account_id
+    LEFT JOIN orders o ON a.id = o.account_id
+GROUP BY
+    a.name;
+
+
+-- Top 10 accounts by number of orders
+SELECT
+    a.name,
+    COUNT(o.id) AS order_count
+FROM
+    accounts a
+    JOIN orders o ON a.id = o.account_id
+GROUP BY
+    a.name
+ORDER BY
+    order_count DESC
+LIMIT 10;
+
+
+-- Accounts with no orders but with web activity
+SELECT
+    a.name,
+    COUNT(we.id) AS web_events
+FROM
+    accounts a
+    LEFT JOIN orders o ON a.id = o.account_id
+    JOIN web_events we ON a.id = we.account_id
+WHERE
+    o.id IS NULL
+GROUP BY
+    a.name
+ORDER BY
+    web_events DESC;
+
+
+-- Average revenue per account
+SELECT
+    a.name,
+    AVG(o.total_amt_usd) AS avg_revenue
+FROM
+    accounts a
+JOIN
+    orders o ON a.id = o.account_id
+GROUP BY
+    a.name
+ORDER BY
+    avg_revenue DESC;
+
+-- Revenue contribution by product type
+SELECT 'standard' AS product, SUM(standard_amt_usd) AS revenue FROM orders
+UNION ALL
+SELECT 'gloss', SUM(gloss_amt_usd) AS revenue FROM orders
+UNION ALL
+SELECT 'poster', SUM(poster_amt_usd) AS revenue FROM orders;
+
+
+-- Hour of day with highest web order
+SELECT
+    EXTRACT(HOUR FROM occurred_at) AS hour,
+    COUNT(*) AS events
+FROM
+    web_events
+GROUP BY
+    hour
+ORDER BY
+    events DESC;
+
+
+-- Revenue from web by account
+SELECT
+    a.name,
+    COUNT(DISTINCT we.id) AS web_events,
+    SUM(o.total_amt_usd) AS total_revenue
+FROM
+    accounts a
+    LEFT JOIN web_events we ON a.id = we.account_id
+    LEFT JOIN orders o ON a.id = o.account_id
+GROUP BY
+    a.name
+ORDER BY
+    total_revenue DESC;
