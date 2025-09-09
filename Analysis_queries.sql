@@ -37,26 +37,26 @@ group by month
 order by month;
 
 
--- Most effect marketing channel
+-- Most effective marketing channel
 
-SELECT w.channel,
+select w.channel,
        COUNT(*) AS total_events,
        COUNT(DISTINCT w.account_id) AS unique_accounts
-FROM web_events w
-GROUP BY w.channel
-ORDER BY total_events DESC;
+from web_events w
+group by w.channel
+order by total_events DESC;
 
 
 -- Sales by region
 
-SELECT r.name AS region,
+select r.name AS region,
        SUM(o.total_amt_usd) AS total_sales
-FROM region r
-JOIN sales_reps sr ON r.id = sr.region_id
-JOIN accounts c ON sr.id = c.sales_rep_id
-JOIN orders o ON c.id = o.account_id
-GROUP BY r.name
-ORDER BY total_sales DESC;
+from region r
+join sales_reps sr ON r.id = sr.region_id
+join accounts c ON sr.id = c.sales_rep_id
+join orders o ON c.id = o.account_id
+group by  r.name
+order by total_sales DESC;
 
 
 -- year 2016, had the highest sales of $12864917.92 and lowest was 2017
