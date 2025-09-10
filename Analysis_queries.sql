@@ -209,3 +209,25 @@ GROUP BY
     a.name
 ORDER BY
     total_revenue DESC;
+
+/*“For each account, after their first non-direct web visit, when did they place their first order, and how long did it take them to convert?”*/
+with first_web_event_per_account as (
+  select
+    account_id,
+    min(occurred_at) as first_web_event_occured_at
+  from posey.web_events
+  where channel <> 'direct'
+  group by account_id
+)
+  
+select
+  o.account_id,
+  min(fwepa.first_web_event_occured_at) as first_web_event_occured_at,
+  min(o.occurred_at) as first_order_occurred_at,
+  min(o.occurred_at - fwepa.first_web_event_occured_at) as time_to_convert
+from posey.orders o
+left join first_web_event_per_account fwepa
+on o.account_id = fwepa.account_id
+where o.occurred_at > fwepa.first_web_event_occured_at
+group by o.account_id
+order by account_id asc;
